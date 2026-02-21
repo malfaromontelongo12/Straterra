@@ -104,7 +104,8 @@ DRIVE_IDS = {
     "kmeans_model.joblib": "1YP6_wF3Ib07Q7ZY-RL62UH5SlMLz2DwD",
     "scaler_index.joblib": "152MyAqTgCf4HikzvRuVqUeVKLDgMId0i",
     "scaler_cluster.joblib": "1mtwMOPfaOt3X1O0fufdUabqVGQXGCsuJ",
-    "rest_base.parquet": "1czsuEwFd5L5TbZ4fgtGC-kXoHZSIZ7N3",  
+    "rest_base.parquet": "1czsuEwFd5L5TbZ4fgtGC-kXoHZSIZ7N3",
+    "balltree.joblib": "1VMs_qh2LBP4uvKj9VUCnaXWuZmL59Y6o"
 }
 
 def ensure_drive_file(filename: str) -> str:
@@ -120,6 +121,20 @@ rf = joblib.load(ensure_drive_file("rf_model.joblib"))
 kmeans = joblib.load(ensure_drive_file("kmeans_model.joblib"))
 scaler_index = joblib.load(ensure_drive_file("scaler_index.joblib"))
 scaler_cluster = joblib.load(ensure_drive_file("scaler_cluster.joblib"))
+tree = joblib.load(ensure_drive_file("balltree.joblib"))
+rest = pd.read_parquet(ensure_drive_file("rest_base.parquet"))
+
+@st.cache_resource
+def load_artifacts():
+    rf = joblib.load(ensure_drive_file("rf_model.joblib"))
+    kmeans = joblib.load(ensure_drive_file("kmeans_model.joblib"))
+    scaler_index = joblib.load(ensure_drive_file("scaler_index.joblib"))
+    scaler_cluster = joblib.load(ensure_drive_file("scaler_cluster.joblib"))
+    tree = joblib.load(ensure_drive_file("balltree.joblib"))
+    rest = pd.read_parquet(ensure_drive_file("rest_base.parquet"))
+    return rf, kmeans, scaler_index, scaler_cluster, tree, rest
+
+rf, kmeans, scaler_index, scaler_cluster, tree, rest = load_artifacts()
 
 # ===============================
 # FUNCIONES
