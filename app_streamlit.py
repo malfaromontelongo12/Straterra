@@ -393,7 +393,7 @@ if st.button("Evaluar ubicación"):
     # ===============================
     # KPI INDICADORES (bonitos y entendibles)
     # ===============================
-    st.markdown("## Indicadores del entorno (en lenguaje de negocio)")
+    st.markdown("## Indicadores del entorno")
 
     comp500 = float(X["competidores_500m"].iloc[0])
     comp1k = float(X["competidores_1km"].iloc[0])
