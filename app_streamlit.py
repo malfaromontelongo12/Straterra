@@ -4,6 +4,10 @@ import numpy as np
 import joblib
 import folium
 from streamlit_folium import st_folium
+import os
+import gdown
+import joblib
+
 
 # ===============================
 # CONFIG + ESTILO
@@ -84,12 +88,38 @@ st.markdown("<h3>Evaluación de Ubicación</h3>", unsafe_allow_html=True)
 # ===============================
 # CARGAR MODELOS / DATA
 # ===============================
-rf = joblib.load("models/rf_model.joblib")
-kmeans = joblib.load("models/kmeans_model.joblib")
-tree = joblib.load("models/balltree.joblib")
-scaler_index = joblib.load("models/scaler_index.joblib")
-scaler_cluster = joblib.load("models/scaler_cluster.joblib")
-rest = pd.read_parquet("models/rest_base.parquet")
+#rf = joblib.load("models/rf_model.joblib")
+#kmeans = joblib.load("models/kmeans_model.joblib")
+#tree = joblib.load("models/balltree.joblib")
+#scaler_index = joblib.load("models/scaler_index.joblib")
+#scaler_cluster = joblib.load("models/scaler_cluster.joblib")
+#rest = pd.read_parquet("models/rest_base.parquet")
+
+MODEL_DIR = "models"
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+# IDs de Drive
+DRIVE_IDS = {
+    "rf_model.joblib": "1KGYgbA5KYTU4Nj0dhmyXVbYktksQlZlh",
+    "kmeans_model.joblib": "1YP6_wF3Ib07Q7ZY-RL62UH5SlMLz2DwD",
+    "scaler_index.joblib": "152MyAqTgCf4HikzvRuVqUeVKLDgMId0i",
+    "scaler_cluster.joblib": "1mtwMOPfaOt3X1O0fufdUabqVGQXGCsuJ",
+    "rest_base.parquet": "1czsuEwFd5L5TbZ4fgtGC-kXoHZSIZ7N3",  
+}
+
+def ensure_drive_file(filename: str) -> str:
+    path = os.path.join(MODEL_DIR, filename)
+    if not os.path.exists(path):
+        file_id = DRIVE_IDS[filename]
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, path, quiet=False)
+    return path
+
+# Cargar modelos
+rf = joblib.load(ensure_drive_file("rf_model.joblib"))
+kmeans = joblib.load(ensure_drive_file("kmeans_model.joblib"))
+scaler_index = joblib.load(ensure_drive_file("scaler_index.joblib"))
+scaler_cluster = joblib.load(ensure_drive_file("scaler_cluster.joblib"))
 
 # ===============================
 # FUNCIONES
