@@ -7,3 +7,5 @@ folium
 streamlit-folium
 pyarrow
 gdown
+pyarrow
+scipy
